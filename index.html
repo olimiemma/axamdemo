@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AXAM — AI Tutor (Demo)</title>
+  <link rel="icon" type="image/png" href="img/icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ══════ Demo Banner ══════ -->
+  <div id="demo-banner">
+    <span class="demo-banner-badge">DEMO</span>
+    <span>You're viewing a live demo of AXAM. Features requiring AI models will show a preview notice.</span>
+    <a href="http://axamai.org/" target="_blank" class="demo-banner-link">Get the full app &rarr;</a>
+  </div>
+
+  <!-- ══════ Main Application ══════ -->
+  <div id="main-app">
+
+    <!-- ── Sidebar ── -->
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo"><img src="img/icon.png" alt="AXAM"></div>
+        <span class="sidebar-title">AXAM</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="home" onclick="AXAM.navigate('home')">
+          <span class="nav-icon">&#x1F3E0;</span>
+          <span>Home</span>
+        </a>
+        <a href="#" class="nav-item" data-page="chat" onclick="AXAM.navigate('chat')">
+          <span class="nav-icon">&#x1F4AC;</span>
+          <span>Chat</span>
+        </a>
+        <a href="#" class="nav-item" data-page="browse" onclick="AXAM.navigate('browse')">
+          <span class="nav-icon">&#x1F4DA;</span>
+          <span>Browse</span>
+        </a>
+        <a href="#" class="nav-item" data-page="exam" onclick="AXAM.navigate('exam')">
+          <span class="nav-icon">&#x1F4DD;</span>
+          <span>Exam Prep</span>
+        </a>
+      </nav>
+      <div class="sidebar-model-picker" id="model-picker">
+        <div class="model-picker-label">AI Model</div>
+        <select id="model-select" class="model-select">
+          <option value="">Loading...</option>
+        </select>
+        <div id="model-info" class="model-info"></div>
+      </div>
+      <div class="sidebar-footer">
+        Powered by MIT OCW<br>
+        100% Offline &middot; <span class="demo-footer-tag">Demo Mode</span>
+      </div>
+    </aside>
+
+    <!-- ── Content Area ── -->
+    <div id="content">
+
+      <!-- ════ HOME ════ -->
+      <section id="page-home" class="page active">
+        <div class="page-body">
+          <div class="home-hero">
+            <div class="home-logo"><img src="img/logo-circle.png" alt="AXAM"></div>
+            <p class="home-tagline">
+              Your offline AI tutor &mdash; powered by 7,600+ MIT lectures.
+              Search, learn, and test yourself &mdash; no internet needed.
+            </p>
+            <div class="home-search input-group">
+              <span class="search-icon">&#x1F50D;</span>
+              <input type="text" class="input search-input"
+                     id="home-search-input"
+                     placeholder="Search lectures, topics, or ask a question..."
+                     onkeydown="if(event.key==='Enter') AXAM.homeSearch()">
+            </div>
+          </div>
+
+          <div class="feature-cards">
+            <div class="card card-clickable feature-card" onclick="AXAM.navigate('chat')">
+              <div class="feature-icon">&#x1F4AC;</div>
+              <div class="feature-title">Chat with AI</div>
+              <div class="feature-desc">Ask any academic question and get answers grounded in MIT lectures</div>
+            </div>
+            <div class="card card-clickable feature-card" onclick="AXAM.navigate('browse')">
+              <div class="feature-icon">&#x1F4DA;</div>
+              <div class="feature-title">Browse Lectures</div>
+              <div class="feature-desc">Explore subjects, courses, and individual lectures from MIT OCW</div>
+            </div>
+            <div class="card card-clickable feature-card" onclick="AXAM.navigate('exam')">
+              <div class="feature-icon">&#x1F4DD;</div>
+              <div class="feature-title">Exam Prep</div>
+              <div class="feature-desc">Generate practice questions on any topic and test your understanding</div>
+            </div>
+          </div>
+
+          <!-- Quick Subject Overview (populated by JS) -->
+          <div style="max-width:780px; margin:0 auto;">
+            <h3 style="font-size:16px; font-weight:600; margin-bottom:14px; color:var(--text-secondary);">
+              Explore by Subject
+            </h3>
+            <div id="home-subjects" class="card-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════ CHAT ════ -->
+      <section id="page-chat" class="page">
+        <div class="chat-container">
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-welcome" id="chat-welcome">
+              <div class="chat-welcome-icon"><img src="img/icon.png" alt="AXAM"></div>
+              <div class="chat-welcome-text">Ask me anything about MIT lectures</div>
+              <div class="chat-suggestions">
+                <div class="chat-suggestion" onclick="ChatModule.sendMessage('What is conditional expectation?')">
+                  What is conditional expectation?
+                </div>
+                <div class="chat-suggestion" onclick="ChatModule.sendMessage('Explain quantum mechanics simply')">
+                  Explain quantum mechanics simply
+                </div>
+                <div class="chat-suggestion" onclick="ChatModule.sendMessage('How does AI affect the economy?')">
+                  How does AI affect the economy?
+                </div>
+                <div class="chat-suggestion" onclick="ChatModule.sendMessage('What is DNA replication?')">
+                  What is DNA replication?
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-input-area">
+            <div class="chat-input-row">
+              <textarea class="chat-input" id="chat-input"
+                        placeholder="Ask a question..." rows="1"
+                        onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); ChatModule.send();}"></textarea>
+              <button class="chat-send-btn" id="chat-send-btn" onclick="ChatModule.send()" title="Send">
+                &#x27A4;
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════ BROWSE ════ -->
+      <section id="page-browse" class="page">
+        <div class="page-header">
+          <div class="page-title">&#x1F4DA; Browse Lectures</div>
+          <div class="page-subtitle">Explore 7,600+ MIT lectures by subject and course</div>
+        </div>
+        <div class="page-body">
+          <div id="browse-breadcrumb" class="breadcrumb"></div>
+          <div class="browse-search input-group" id="browse-search-wrap">
+            <span class="search-icon">&#x1F50D;</span>
+            <input type="text" class="input search-input" id="browse-search"
+                   placeholder="Filter lectures..."
+                   oninput="BrowseModule.onSearch(this.value)">
+          </div>
+          <div id="browse-content"></div>
+        </div>
+      </section>
+
+      <!-- ════ EXAM ════ -->
+      <section id="page-exam" class="page">
+        <div class="page-header">
+          <div class="page-title">&#x1F4DD; Exam Prep</div>
+          <div class="page-subtitle">Generate practice questions and test your knowledge</div>
+        </div>
+        <div class="page-body">
+          <div id="exam-content"></div>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </div><!-- /main-app -->
+
+</div><!-- /app -->
+
+<!-- Demo Modal -->
+<div id="demo-modal" class="demo-modal-overlay hidden" onclick="AXAM.closeDemoModal(event)">
+  <div class="demo-modal">
+    <div class="demo-modal-icon" id="demo-modal-icon">&#x1F916;</div>
+    <div class="demo-modal-title" id="demo-modal-title">AI Feature</div>
+    <div class="demo-modal-body" id="demo-modal-body"></div>
+    <button class="btn btn-primary" onclick="AXAM.closeDemoModal()" style="margin-top:20px;">Got it</button>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- Scripts -->
+<script src="js/app.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/browse.js"></script>
+<script src="js/exam.js"></script>
+
+</body>
+</html>
