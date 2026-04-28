@@ -320,7 +320,7 @@ const AXAM = (() => {
       'and never need internet.' +
       '<br><br>' +
       '<span style="color:var(--text-muted);font-size:13px;">' +
-      'The full package includes 3 LLM tiers (Gemma 3 4B, Gemma 2 2B, Qwen 2.5 1.5B) ' +
+      'The full package includes 3 LLM tiers (A1: AXAM Pro, A2: AXAM Standard, A3: AXAM Lite) ' +
       'that auto-select based on your hardware.</span>';
     modal.classList.remove('hidden');
   }
@@ -383,16 +383,16 @@ const AXAM = (() => {
 
   // ── Model Picker ────────────────────────────────────────────
   const MODELS = [
-    { key: 'gemma3-4b', name: 'Gemma 3 4B', tier: 1, requires_gpu: true, speed: '1-3s (GPU)', desc: 'Best quality \u2014 GPU with 4+ GB VRAM' },
-    { key: 'gemma2-2b', name: 'Gemma 2 2B', tier: 2, requires_gpu: false, speed: '2-4s (CPU)', desc: 'Mid-range \u2014 GPU or CPU, 8+ GB RAM' },
-    { key: 'qwen25-1.5b', name: 'Qwen 2.5 1.5B', tier: 3, requires_gpu: false, speed: '3-5s (CPU)', desc: 'Fastest \u2014 runs on low-end machines' },
+    { key: 'gemma3-4b', name: 'A1: AXAM Pro', tier: 1, requires_gpu: true, speed: '1-3s (GPU)', desc: 'Best quality \u2014 GPU with 4+ GB VRAM' },
+    { key: 'gemma2-2b', name: 'A2: AXAM Standard', tier: 2, requires_gpu: false, speed: '2-4s (CPU)', desc: 'Mid-range \u2014 GPU or CPU, 8+ GB RAM' },
+    { key: 'qwen25-1.5b', name: 'A3: AXAM Lite', tier: 3, requires_gpu: false, speed: '3-5s (CPU)', desc: 'Fastest \u2014 runs on low-end machines' },
   ];
   let activeModel = 'gemma2-2b';
 
   function initModelPicker() {
     const select = document.getElementById('model-select');
     select.innerHTML = MODELS.map(m =>
-      `<option value="${m.key}"${m.key === activeModel ? ' selected' : ''}>T${m.tier}: ${m.name}</option>`
+      `<option value="${m.key}"${m.key === activeModel ? ' selected' : ''}>${m.name}</option>`
     ).join('');
     select.disabled = false;
     select.addEventListener('change', function() {
