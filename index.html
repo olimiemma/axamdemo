@@ -196,5 +196,124 @@
 <script src="js/browse.js"></script>
 <script src="js/exam.js"></script>
 
+<!-- AXAM splash overlay -->
+<div id="axam-splash" role="status" aria-live="polite">
+  <div class="axam-splash-card">
+    <button class="axam-splash-min" type="button" aria-label="Minimize" title="Minimize">&minus;</button>
+    <button class="axam-splash-close" type="button" aria-label="Close" title="Close">&times;</button>
+    <div class="axam-splash-title">AXAM is loading&hellip;</div>
+    <div class="axam-splash-tag" id="axam-splash-tag">Enjoy 100% offline AI.</div>
+    <ul class="axam-splash-keys" id="axam-splash-keys"></ul>
+    <div class="axam-splash-disc">Built for learning. Use AXAM as a study aid &mdash; verify important facts. Offline AI may make mistakes.</div>
+    <div class="axam-splash-author">
+      by <strong>Emmanuel Olimi Kasigazi</strong>
+      &nbsp;&middot;&nbsp;
+      <a href="https://linktr.ee/olimiemma" target="_blank" rel="noopener noreferrer">links</a>
+      &nbsp;&middot;&nbsp;
+      <a href="https://buymeacoffee.com/olimiemmas" target="_blank" rel="noopener noreferrer">support &#9749;</a>
+    </div>
+    <div class="axam-splash-bar"><div class="axam-splash-bar-fill"></div></div>
+  </div>
+  <button class="axam-splash-pill" type="button" aria-label="Show AXAM splash" hidden>AXAM</button>
+</div>
+<style>
+#axam-splash { position: fixed; right: 16px; bottom: 16px; z-index: 99999; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+.axam-splash-card { width: 340px; max-width: calc(100vw - 32px); background: #0f172a; color: #f1f5f9; border: 1px solid #2DA0D9; border-radius: 12px; padding: 18px 18px 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(45,160,217,0.15); position: relative; animation: axam-splash-in 220ms ease-out both; }
+@keyframes axam-splash-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .axam-splash-card { animation: none !important; } .axam-splash-bar-fill { transition: none !important; } }
+.axam-splash-min, .axam-splash-close { position: absolute; top: 8px; background: transparent; color: #94a3b8; border: none; cursor: pointer; line-height: 1; width: 24px; height: 24px; padding: 0; border-radius: 4px; font-size: 18px; }
+.axam-splash-min:hover, .axam-splash-close:hover { background: rgba(255,255,255,0.08); color: #f1f5f9; }
+.axam-splash-min { right: 36px; }
+.axam-splash-close { right: 10px; font-size: 20px; }
+.axam-splash-title { font-size: 15px; font-weight: 600; color: #f1f5f9; margin-right: 56px; }
+.axam-splash-tag { font-size: 12px; color: #94a3b8; margin-top: 2px; margin-right: 56px; }
+.axam-splash-keys { list-style: none; margin: 14px 0 12px; padding: 0; }
+.axam-splash-keys li { font-size: 13px; font-weight: 700; letter-spacing: 0.4px; color: #f1f5f9; padding: 7px 10px; margin: 4px 0; background: linear-gradient(90deg, rgba(45,160,217,0.18), rgba(45,160,217,0.05)); border-left: 3px solid #2DA0D9; border-radius: 4px; text-transform: uppercase; }
+.axam-splash-keys li small { display: block; font-size: 11px; font-weight: 400; letter-spacing: 0.1px; color: #94a3b8; text-transform: none; margin-top: 2px; }
+.axam-splash-disc { font-size: 11px; color: #94a3b8; line-height: 1.5; margin-top: 10px; }
+.axam-splash-author { font-size: 11px; color: #64748b; margin-top: 10px; }
+.axam-splash-author strong { color: #94a3b8; font-weight: 600; }
+.axam-splash-author a { color: #2DA0D9; text-decoration: none; }
+.axam-splash-author a:hover { text-decoration: underline; }
+.axam-splash-bar { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-top: 12px; overflow: hidden; }
+.axam-splash-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #2DA0D9, #8CC63F); transition: width 220ms linear; }
+.axam-splash-pill { background: #2DA0D9; color: #fff; border: none; padding: 8px 14px; border-radius: 999px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-size: 12px; letter-spacing: 0.5px; }
+.axam-splash-pill:hover { background: #1E8BC3; }
+#axam-splash.minimized .axam-splash-card { display: none; }
+#axam-splash.minimized .axam-splash-pill { display: inline-block; }
+#axam-splash.dismissed { display: none; }
+@media (max-width: 480px) { #axam-splash { right: 8px; bottom: 8px; left: 8px; } .axam-splash-card { width: auto; } }
+</style>
+<script>
+(function () {
+  var splash = document.getElementById('axam-splash');
+  if (!splash) return;
+  var keys = splash.querySelector('#axam-splash-keys');
+  var tag  = splash.querySelector('#axam-splash-tag');
+  var bar  = splash.querySelector('.axam-splash-bar-fill');
+  var pill = splash.querySelector('.axam-splash-pill');
+
+  var variants = [
+    { tag: 'Enjoy 100% offline AI.',
+      items: [['NO INTERNET REQUIRED', ''], ['NO USAGE CAPS', ''], ['NO TOKEN BILLING', '']] },
+    { tag: 'Learn anywhere. No limits.',
+      items: [
+        ['ZERO INTERNET REQUIRED', 'Unlimited access for every student, every time, wherever they are.'],
+        ['NO TOKEN BILLING METERS', "There's no API to charge."],
+        ['NO USAGE CAPS OR RATE LIMITS', 'Ask as many questions as you want — no cost per query.']
+      ] }
+  ];
+  var last = parseInt(localStorage.getItem('axamSplashLast') || '-1', 10);
+  if (isNaN(last)) last = -1;
+  var idx = (last + 1) % variants.length;
+  try { localStorage.setItem('axamSplashLast', String(idx)); } catch (e) {}
+  var v = variants[idx];
+  tag.textContent = v.tag;
+  v.items.forEach(function (pair) {
+    var li = document.createElement('li');
+    li.textContent = pair[0];
+    if (pair[1]) { var s = document.createElement('small'); s.textContent = pair[1]; li.appendChild(s); }
+    keys.appendChild(li);
+  });
+
+  splash.querySelector('.axam-splash-close').addEventListener('click', function () { splash.classList.add('dismissed'); });
+  splash.querySelector('.axam-splash-min').addEventListener('click', function () { splash.classList.add('minimized'); pill.hidden = false; });
+  pill.addEventListener('click', function () { splash.classList.remove('minimized'); pill.hidden = true; });
+
+  var startedAt = Date.now();
+  var MIN_DWELL = 3500;
+  var loaded = false;
+  var pct = 0;
+  function setBar(p) { pct = Math.max(pct, p); bar.style.width = Math.min(100, pct) + '%'; }
+  function maybeFinish() {
+    var elapsed = Date.now() - startedAt;
+    if (loaded && elapsed >= MIN_DWELL) {
+      setBar(100);
+      setTimeout(function () {
+        if (!splash.classList.contains('minimized') && !splash.classList.contains('dismissed')) splash.classList.add('dismissed');
+      }, 450);
+    } else if (loaded) {
+      setTimeout(maybeFinish, MIN_DWELL - elapsed);
+    }
+  }
+  function synthetic() {
+    var step = function () { setBar(pct + 8); if (pct < 90) setTimeout(step, 260); else { loaded = true; maybeFinish(); } };
+    step();
+  }
+  function poll() {
+    if (!window.fetch) { synthetic(); return; }
+    fetch('/api/status', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (d) {
+        if (d && (d.ready === true || d.status === 'ready' || d.loaded === true)) { loaded = true; maybeFinish(); }
+        else { setBar(pct + 5); setTimeout(poll, 600); }
+      })
+      .catch(function () { synthetic(); });
+  }
+  poll();
+  setTimeout(function () { if (!splash.classList.contains('minimized')) splash.classList.add('dismissed'); }, 30000);
+})();
+</script>
+
 </body>
 </html>
